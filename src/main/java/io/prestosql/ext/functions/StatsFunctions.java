@@ -1,21 +1,21 @@
-package com.facebook.presto.ext.functions;
+package io.prestosql.ext.functions;
 
-import com.facebook.presto.spi.function.ScalarFunction;
-import com.facebook.presto.spi.function.Description;
-import com.facebook.presto.spi.function.SqlNullable;
-import com.facebook.presto.spi.function.SqlType;
-import com.facebook.presto.spi.type.*;
+import io.prestosql.spi.function.ScalarFunction;
+import io.prestosql.spi.function.Description;
+import io.prestosql.spi.function.SqlNullable;
+import io.prestosql.spi.function.SqlType;
+import io.prestosql.spi.type.*;
 import org.apache.commons.math3.distribution.NormalDistribution;
 
-public class ExtStatsFunctions {
+public class StatsFunctions {
 
-    private ExtStatsFunctions() {}
+    private StatsFunctions() {}
 
     @ScalarFunction("normal_dist_invert")
     @Description("return the inverted normal distribution")
     @SqlType(StandardTypes.DOUBLE)
     @SqlNullable
-    public static Double s2Cell(
+    public static Double normalDistInvert(
             @SqlType(StandardTypes.DOUBLE ) double value)
     {
         NormalDistribution distribution = new NormalDistribution(0,1);
