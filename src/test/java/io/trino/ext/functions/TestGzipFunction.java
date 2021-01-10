@@ -1,4 +1,4 @@
-package io.prestosql.ext.functions;
+package io.trino.ext.functions;
 
 import io.airlift.slice.Slices;
 import org.testng.annotations.Test;

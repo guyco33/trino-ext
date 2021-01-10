@@ -1,6 +1,6 @@
-package io.prestosql.ext.functions;
+package io.trino.ext.functions;
 
-import io.prestosql.spi.Plugin;
+import io.trino.spi.Plugin;
 import com.google.common.collect.ImmutableSet;
 
 import java.util.Set;
