@@ -57,7 +57,7 @@
         <dependency>
             <groupId>io.trino</groupId>
             <artifactId>trino-spi</artifactId>
-            <version>358</version>
+            <version>359</version>
             <scope>provided</scope>
         </dependency>
 

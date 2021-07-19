@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 
 import static io.trino.spi.type.VarcharType.VARCHAR;
 import static io.airlift.slice.Slices.utf8Slice;
+import static java.lang.String.format;
 
 
 public class JsonFunctions {
@@ -87,13 +88,13 @@ public class JsonFunctions {
                     case VALUE_FALSE:
                     case VALUE_NULL:
                         if (inKey) {
-                            result.add(String.join(":", key));
+                            result.add(format("/%s", String.join("/", key)));
                             key.remove(key.size() - 1);
                             inKey = false;
                         }
                         else {
                             if (!key.isEmpty() && key.get(key.size() - 1).endsWith("*"))
-                                result.add(String.join(":", key));
+                                result.add(format("/%s", String.join("/", key)));
                         }
                         break;
                 }
