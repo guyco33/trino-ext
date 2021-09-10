@@ -101,8 +101,7 @@ public class JsonFunctions {
             }
         }
         catch (java.lang.Exception e) {
-//            result.add("guyco");
-            throw  e;
+            System.out.println(e);
         }
         return result.stream().sorted().collect(Collectors.toList());
     }
