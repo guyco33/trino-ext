@@ -95,7 +95,7 @@ public class CSVFunctions {
             BlockBuilder blockBuilder = VARCHAR.createBlockBuilder(null, list.get(0).size());
             for (String value: list.get(0))
                 VARCHAR.writeSlice(blockBuilder, utf8Slice(value));
-            return blockBuilder;
+            return blockBuilder.build();
         }
         catch (Exception e) {
             return null;
