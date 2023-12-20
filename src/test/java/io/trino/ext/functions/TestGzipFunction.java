@@ -1,7 +1,9 @@
 package io.trino.ext.functions;
 
 import io.airlift.slice.Slices;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.parallel.Execution;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -9,11 +11,17 @@ import java.util.zip.GZIPOutputStream;
 
 import static io.airlift.slice.Slices.utf8Slice;
 import static io.airlift.slice.Slices.wrappedBuffer;
+import static io.trino.ext.functions.GzipFunctions.decompress;
 import static java.nio.charset.StandardCharsets.UTF_8;
-import static org.testng.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
+import static org.junit.jupiter.api.parallel.ExecutionMode.CONCURRENT;
 
-public class TestGzipFunction {
-
+@TestInstance(PER_CLASS)
+@Execution(CONCURRENT)
+public class TestGzipFunction
+{
     private byte[] compressMessage(byte[] data)
     {
         try {
@@ -29,19 +37,21 @@ public class TestGzipFunction {
     }
 
     @Test
-    public void testDecompress() {
+    public void testDecompress()
+    {
+        String plainStr = "compressed message";
         assertEquals(
-                GzipFunctions.decompress(wrappedBuffer(compressMessage("compressed message".getBytes(UTF_8)))).toStringUtf8(),
-                "compressed message");
+                decompress(wrappedBuffer(compressMessage(plainStr.getBytes(UTF_8)))).toStringUtf8(),
+                plainStr);
 
         assertEquals(
-                GzipFunctions.decompress(utf8Slice("test message")).toStringUtf8(),
+                decompress(utf8Slice("test message")).toStringUtf8(),
                 "test message");
 
-        assertNull(GzipFunctions.decompress(null));
+        assertNull(decompress(null));
 
         assertEquals(
-                GzipFunctions.decompress(Slices.EMPTY_SLICE),
+                decompress(Slices.EMPTY_SLICE),
                 utf8Slice(""));
     }
 }
