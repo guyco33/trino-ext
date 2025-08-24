@@ -56,31 +56,45 @@ public class JsonFunctions {
     }
 
     public static List<String> getJsonKeys(String str,boolean qualifiedName) {
-        HashSet<String> result = new HashSet<String>();
+        HashSet<String> result = new HashSet<>();
         try {
             boolean inKey=false;
             JsonParser parser = Json.createParser(new StringReader(str));
-            ArrayList<String> key = new ArrayList<String>();
+            ArrayList<String> key = new ArrayList<>();
             while (parser.hasNext()) {
                 JsonParser.Event event = parser.next();
                 switch (event) {
                     case KEY_NAME:
                         inKey = true;
-                        if (!qualifiedName) key.clear();
+                        if (!qualifiedName) {
+                            key.clear();
+                        }
                         key.add(parser.getString());
                         break;
                     case START_ARRAY:
                         inKey = false;
-                        if (qualifiedName && !key.isEmpty())
+                        if (qualifiedName && !key.isEmpty()) {
                             key.set(key.size() - 1, key.get(key.size() - 1) + "*");
+                        }
                         break;
                     case END_ARRAY:
-                        if (!key.isEmpty() && key.get(key.size() - 1).endsWith("*"))
-                            key.remove(key.size() - 1);
+                        if (key.isEmpty()) {
+                            break;
+                        }
+                        String lastKeyPart = key.get(key.size() - 1);
+                        if (lastKeyPart.endsWith("*")) {
+                            if (lastKeyPart.endsWith("**")) {
+                                key.set(key.size() - 1, lastKeyPart.substring(0, lastKeyPart.length() - 1));
+                            }
+                            else {
+                                key.remove(key.size() - 1);
+                            }
+                        }
                         break;
                     case END_OBJECT:
-                        if (!key.isEmpty() && !key.get(key.size() - 1).endsWith("*"))
+                        if (!key.isEmpty() && !key.get(key.size() - 1).endsWith("*")) {
                             key.remove(key.size() - 1);
+                        }
                         break;
                     case VALUE_STRING:
                     case VALUE_NUMBER:
@@ -122,8 +136,9 @@ public class JsonFunctions {
 
     public static Block stringArrayBlock(List<String> list) {
         BlockBuilder blockBuilder = VARCHAR.createBlockBuilder(null, list.size());
-        for (String str: list)
+        for (String str: list) {
             VARCHAR.writeSlice(blockBuilder, utf8Slice(str));
+        }
         return blockBuilder.build();
 
     }

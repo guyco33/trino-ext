@@ -46,6 +46,10 @@ public class TestJsonFunctions
                 "SELECT get_json_keys('{\"x\":123, \"y\":12}')"))
                 .matches("VALUES (Array[varchar'/x', varchar'/y'])");
 
+        assertEquals(
+                getJsonKeys("{\"a\":{\"b\":[{\"c\":{\"(c,1)\":{\"x\":1,\"y\":1},\"(c,2}\":{\"x\":2,\"y\":2}},\"d\":[{\"dd\":[[{\"dd1\":1,\"dd2\":1},{\"dd1\":2,\"dd2\":0}],[{\"dd1\":3,\"dd2\":1}]]}]},{\"c\":{\"(c,1)\":{\"x\":1,\"y\":1},\"(c,2}\":{\"x\":2,\"y\":2}},\"d\":[{\"dd\":[[{\"dd1\":1,\"dd2\":1},{\"dd1\":2,\"dd2\":0}],[{\"dd1\":3,\"dd2\":1}]]}]}]}}", true),
+                Arrays.asList("/a/b*/c/(c,1)/x", "/a/b*/c/(c,1)/y", "/a/b*/c/(c,2}/x", "/a/b*/c/(c,2}/y", "/a/b*/d*/dd**/dd1", "/a/b*/d*/dd**/dd2"));
+
         System.out.println(System.getProperty("user.dir"));
         String str = new String(Files.readAllBytes(Paths.get("resources/test.json")));
         assertEquals(
